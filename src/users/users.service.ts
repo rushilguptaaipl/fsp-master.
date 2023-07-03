@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { SignUpDto } from 'src/auth/dto/signup.dto';
 
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -17,5 +18,13 @@ export class UsersService {
 
   createUser(signUpDto: SignUpDto): Promise<User | null> {
     return this.usersRepository.save(signUpDto);
+  }
+
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
+  Update(id: number, UpdateUserDto) {
+    return this.usersRepository.update(id, UpdateUserDto);
   }
 }
