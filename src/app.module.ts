@@ -7,7 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './config/jwt/jwt.constants';
-
+import { UserAddressModule } from './user-address/user-address.module';
+import { User_address } from './user-address/entities/user-address.entity';
+ 
 @Module({
   imports: [
     UsersModule,
@@ -19,7 +21,7 @@ import { jwtConstants } from './config/jwt/jwt.constants';
       username: 'root',
       password: '',
       database: 'auth',
-      entities: [User],
+      entities: [User,User_address],
       synchronize: true,
     }),
     AuthModule,
@@ -29,6 +31,7 @@ import { jwtConstants } from './config/jwt/jwt.constants';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
+    UserAddressModule,
   ],
 
   controllers: [AppController],
