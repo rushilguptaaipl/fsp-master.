@@ -1,20 +1,15 @@
 import { User } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-
-export enum isDefaultEnum {
-  Default = 1,
-  NotDefault = 2,
-}
-enum AllowedValues {
-  Active = 1,
-  InActive = 2,
-}
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { isDefaultEnum } from '../enum/isDefaultEnum';
+import { allowedValuesEnum } from '../enum/allowedValuesEnum';
+// export enum isDefaultEnum {
+//   Default = 1,
+//   NotDefault = 2,
+// }
+// enum AllowedValues {
+//   Active = 1,
+//   InActive = 2,
+// }
 
 @Entity('user_address')
 export class User_address {
@@ -29,11 +24,11 @@ export class User_address {
 
   @Column({
     type: 'enum',
-    enum: AllowedValues,
-    default: AllowedValues.Active,
+    enum: allowedValuesEnum,
+    default: allowedValuesEnum.Active,
     comment: '0 => Active , 1 => InActive',
   })
-  status: AllowedValues;
+  status: allowedValuesEnum;
 
   @Column({
     type: 'enum',
@@ -45,4 +40,14 @@ export class User_address {
 
   @ManyToOne(() => User, (user) => user.addresses)
   user: User;
+
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  public createdAt: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  public updatedAt: Date;
 }
