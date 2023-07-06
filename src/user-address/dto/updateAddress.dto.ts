@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class addAddressDto {
+export class updateAddressDto {
   @IsNotEmpty()
   @IsString()
   city: string;
@@ -8,5 +8,4 @@ export class addAddressDto {
   @IsString()
   street: string;
 
-  user: any;
 }

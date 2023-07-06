@@ -1,5 +1,5 @@
 import { User_address } from 'src/user-address/entities/user-address.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, DeleteDateColumn, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -17,4 +17,13 @@ export class User {
 
   @OneToMany(type => User_address , address => address.user )
   addresses: User_address[]
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  public createdAt: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  public updatedAt: Date;
 }

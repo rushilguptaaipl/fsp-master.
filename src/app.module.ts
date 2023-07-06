@@ -23,6 +23,7 @@ import { User_address } from './user-address/entities/user-address.entity';
       database: 'auth',
       entities: [User,User_address],
       synchronize: true,
+      // logging:true
     }),
     AuthModule,
     UsersModule,
