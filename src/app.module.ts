@@ -9,6 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './config/jwt/jwt.constants';
 import { UserAddressModule } from './user-address/user-address.module';
 import { User_address } from './user-address/entities/user-address.entity';
+import { Roles } from './auth/entity/roles.entity';
+import { Permission } from './auth/entity/permission.entity';
  
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { User_address } from './user-address/entities/user-address.entity';
       username: 'root',
       password: '',
       database: 'auth',
-      entities: [User,User_address],
+      entities: [User,User_address,Roles,Permission],
       synchronize: true,
       // logging:true
     }),

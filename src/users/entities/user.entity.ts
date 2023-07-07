@@ -18,6 +18,15 @@ export class User {
   @OneToMany(type => User_address , address => address.user )
   addresses: User_address[]
 
+  @Column()
+  firstName:string;
+
+  @Column()
+  lastName:string;
+
+  @Column()
+  phoneNo : number
+
   @DeleteDateColumn()
   deletedAt?: Date;
 

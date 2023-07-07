@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { SignUpDto } from 'src/auth/dto/signup.dto';
+import { ChangePasswordDto } from './dto/changePasswordDto';
 
 
 @Injectable()
@@ -26,5 +27,13 @@ export class UsersService {
 
   Update(id: number, UpdateUserDto) {
     return this.usersRepository.update(id, UpdateUserDto);
+  }
+
+  updateProfile(id:number , UpdateUserDto){
+    return this.usersRepository.update(id,UpdateUserDto)
+  }
+
+  changePassword(id:number , changePasswordDto:ChangePasswordDto){
+    if(changePasswordDto){}
   }
 }
