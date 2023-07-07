@@ -14,4 +14,5 @@ export class AuthController {
   signUp(@Body() signupDto: SignUpDto) {
     return this.authservice.signUp(signupDto);
   }
+  
 }

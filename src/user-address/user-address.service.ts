@@ -31,7 +31,7 @@ export class UserAddressService {
   }
 
   async updateDefaultAddress(userid, id) {
-    const test: any = await this.addressRepository.find({
+    const test: any= await this.addressRepository.find({
       where: { user: { id: userid }, isDefault: isDefaultEnum.Default },
       relations: { user: true },
     });

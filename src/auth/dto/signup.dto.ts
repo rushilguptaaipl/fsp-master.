@@ -9,5 +9,15 @@ export class SignUpDto {
   @IsAlphanumeric()
   @IsNotEmpty()
   password: string;
-   
+
+  @IsNotEmpty()
+  @IsString()
+  firstName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
+
+  @IsNotEmpty()
+  phoneNo: number;
 }
