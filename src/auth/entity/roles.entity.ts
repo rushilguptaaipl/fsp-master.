@@ -8,7 +8,7 @@ import {
 @Entity()
 export class Roles {
   @PrimaryGeneratedColumn({type:'bigint'})
-  id: number;
+  role_id: number;
 
   @Column({type:'varchar'})
   name: string;

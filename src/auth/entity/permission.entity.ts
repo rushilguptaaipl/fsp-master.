@@ -6,7 +6,7 @@ import {
   } from 'typeorm';
   
   @Entity()
-  export class Roles {
+  export class Permission {
     @PrimaryGeneratedColumn({type:'bigint'})
     id: number;
   

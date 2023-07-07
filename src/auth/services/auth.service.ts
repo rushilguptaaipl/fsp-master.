@@ -3,9 +3,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { SignInDto } from './dto/signin.dto';
+import { SignInDto } from '../dto/signin.dto';
 import { UsersService } from 'src/users/users.service';
-import { SignUpDto } from './dto/signup.dto'; 
+import { SignUpDto } from '../dto/signup.dto'; 
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

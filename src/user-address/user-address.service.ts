@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User_address } from './entities/user-address.entity';
-import { Any, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { isDefaultEnum } from './enum/isDefaultEnum';
