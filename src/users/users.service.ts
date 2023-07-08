@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { SignUpDto } from 'src/auth/dto/signup.dto';
 import { ChangePasswordDto } from './dto/changePasswordDto';
-
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -22,18 +22,28 @@ export class UsersService {
   }
 
   findAll(): Promise<User[]> {
-    return this.usersRepository.find({relations:["addresses"]});
+    return this.usersRepository.find({ relations: ['addresses'] });
   }
 
-  Update(id: number, UpdateUserDto) {
+  // Update(id: number, UpdateUserDto) {
+  //   return this.usersRepository.update(id, UpdateUserDto);
+  // }
+
+  updateProfile(id: number, UpdateUserDto) {
     return this.usersRepository.update(id, UpdateUserDto);
   }
 
-  updateProfile(id:number , UpdateUserDto){
-    return this.usersRepository.update(id,UpdateUserDto)
-  }
-
-  changePassword(id:number , changePasswordDto:ChangePasswordDto){
-    if(changePasswordDto){}
+  changePassword(id: number, changePasswordDto: ChangePasswordDto) {
+    if (this.usersRepository.find({ where: { id: id } })) {
+      if (changePasswordDto.password != changePasswordDto.confirm_password) {
+        throw new UnauthorizedException("new oassword and confirm password did not match");
+      }
+      const {old_password , confirm_password , ...password} = changePasswordDto
+      return this.usersRepository.update(id, password);
+    }
+    else
+    {
+      throw new UnauthorizedException("user not found")
+    }
   }
 }
