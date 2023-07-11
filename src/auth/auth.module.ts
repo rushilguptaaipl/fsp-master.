@@ -12,6 +12,8 @@ import { Permission } from './entity/permission.entity';
 import { PermissionController } from './controller/permission.controller';
 import { PermissionService } from './services/permission.service';
 import { UsersVerifiedOtp } from './entity/userVerifiedTOtp.entity';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports:[UsersModule,
@@ -20,10 +22,10 @@ import { UsersVerifiedOtp } from './entity/userVerifiedTOtp.entity';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
     }),
-  TypeOrmModule.forFeature([Roles,Permission,UsersVerifiedOtp])
+  TypeOrmModule.forFeature([Roles,Permission,UsersVerifiedOtp,User])
   ],
   controllers: [AuthController, RolesController, PermissionController],
-  providers: [AuthService, RolesService, PermissionService]
+  providers: [AuthService, RolesService, PermissionService,UsersService]
 })
 export class AuthModule {}
   
