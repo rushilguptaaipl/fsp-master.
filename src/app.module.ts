@@ -11,6 +11,7 @@ import { UserAddressModule } from './user-address/user-address.module';
 import { User_address } from './user-address/entities/user-address.entity';
 import { Roles } from './auth/entity/roles.entity';
 import { Permission } from './auth/entity/permission.entity';
+import { UsersVerifiedOtp } from './auth/entity/userVerifiedTOtp.entity';
  
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { Permission } from './auth/entity/permission.entity';
       username: 'root',
       password: '',
       database: 'auth',
-      entities: [User,User_address,Roles,Permission],
+      entities: [User,User_address,Roles,Permission,UsersVerifiedOtp],
       synchronize: true,
       // logging:true
     }),
