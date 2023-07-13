@@ -1,25 +1,32 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-  } from 'typeorm';
-  
-  @Entity()
-  export class Permission {
-    @PrimaryGeneratedColumn({type:'bigint'})
-    id: number;
-  
-    @Column({type:'varchar'})
-    name: string;
-  
-    @Column({type:'varchar'})
-    guard_name: string;
-  
-    @CreateDateColumn({ type: 'timestamp' })
-    public createdAt: Date;
-  
-    @CreateDateColumn({ type: 'timestamp' })
-    public updatedAt: Date;
-  }
-  
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Roles } from './roles.entity';
+import { User } from 'src/users/entities/user.entity';
+
+@Entity()
+export class Permission {
+  @PrimaryGeneratedColumn({ type: 'bigint' })
+  id: number;
+
+  @Column({ type: 'varchar' })
+  name: string;
+
+  @Column({ type: 'varchar' })
+  guard_name: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  public createdAt: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  public updatedAt: Date;
+
+  @ManyToMany(() => User)
+  @JoinTable({ name: 'user_has_permission' })
+  user: User[];
+}

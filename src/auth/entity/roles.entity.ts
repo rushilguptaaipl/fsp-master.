@@ -26,6 +26,6 @@ export class Roles {
   public updatedAt: Date;
 
   @ManyToMany(() => Permission)
-  @JoinTable()
+  @JoinTable({name:"role_has_permission"})
   permissions: Permission[]
 }
