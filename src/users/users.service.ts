@@ -4,7 +4,6 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { SignUpDto } from 'src/auth/dto/signup.dto';
 import { ChangePasswordDto } from './dto/changePasswordDto';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class UsersService {
