@@ -7,11 +7,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Permission } from './permission.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Roles {
   @PrimaryGeneratedColumn({type:'bigint'})
-  role_id: number;
+  id: number;
 
   @Column({type:'varchar'})
   name: string;
@@ -28,4 +29,7 @@ export class Roles {
   @ManyToMany(() => Permission)
   @JoinTable({name:"role_has_permission"})
   permissions: Permission[]
+
+  @ManyToMany(() => User , (user)=>user.role)
+  user: User[];
 }

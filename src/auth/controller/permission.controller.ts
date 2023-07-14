@@ -35,4 +35,9 @@ export class PermissionController {
   deletePermission(@Param('id') id: number) {
     return this.permissionService.deletePermission(id);
   }
+
+  @Post("assign-permission")
+  assignPermission(@Body() data:any){
+    return this.permissionService.assignPermission(data);
+  }
 }

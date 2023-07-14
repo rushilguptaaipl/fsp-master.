@@ -1,5 +1,7 @@
+import { Permission } from 'src/auth/entity/permission.entity';
+import { Roles } from 'src/auth/entity/roles.entity';
 import { User_address } from 'src/user-address/entities/user-address.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, DeleteDateColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, DeleteDateColumn, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class User {
@@ -35,4 +37,13 @@ export class User {
 
   @CreateDateColumn({ type: 'timestamp' })
   public updatedAt: Date;
+
+  @ManyToMany(() => Permission , (Permission)=>Permission.user, { cascade: true })
+  @JoinTable({ name: 'user_has_permission' })
+  permission: Permission[];
+
+
+  @ManyToMany(() => Roles , (roles) => roles.user, { cascade: true })
+  @JoinTable({ name: 'user_has_roles' })
+  role: Roles[];
 }

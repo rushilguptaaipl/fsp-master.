@@ -32,4 +32,9 @@ export class RolesController {
   deleteRole(@Param('id') id:number){
     return this.roleService.deleteRole(id)
   }
+
+  @Post("assign-role")
+  assignRole(@Body() data:any){
+    return this.roleService.assignRole(data);
+  }
 }
