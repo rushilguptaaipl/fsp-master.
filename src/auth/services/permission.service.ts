@@ -5,6 +5,8 @@ import { CreatePermissionDto } from '../dto/createPermissionDto';
 import { UpdatePermissionDto } from '../dto/updatePermissionDto';
 import { Permission } from '../entity/permission.entity';
 import { User } from 'src/users/entities/user.entity';
+import { I18nContext, I18nService } from 'nestjs-i18n';
+import { log } from 'console';
 
 @Injectable()
 export class PermissionService {
@@ -13,6 +15,7 @@ export class PermissionService {
     private permissionRepository: Repository<Permission>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly i18n: I18nService
   ) {}
 
   createPermission(createPermissionDto: CreatePermissionDto) {
@@ -56,9 +59,13 @@ export class PermissionService {
         relations: { permission: true },
       })
     ) {
-      throw new UnauthorizedException('permission already assigned');
+      // throw new UnauthorizedException('permission already assigned');
+      
+      // return this.i18n.t('test.INVALID',{ lang:   this.i18n.resolveLanguage("nl")});
+      return this.i18n.t('test.INVALID',{ lang:   I18nContext.current().lang });
     }
     user.permission.push(permission);
     return this.usersRepository.save(user);
   }
 }
+ 

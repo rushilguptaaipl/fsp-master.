@@ -12,7 +12,9 @@ import { User_address } from './user-address/entities/user-address.entity';
 import { Roles } from './auth/entity/roles.entity';
 import { Permission } from './auth/entity/permission.entity';
 import { UsersVerifiedOtp } from './auth/entity/userVerifiedTOtp.entity';
- 
+import path from 'path';
+import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+
 @Module({
   imports: [
     UsersModule,
@@ -24,9 +26,24 @@ import { UsersVerifiedOtp } from './auth/entity/userVerifiedTOtp.entity';
       username: 'root',
       password: '',
       database: 'auth',
-      entities: [User,User_address,Roles,Permission,UsersVerifiedOtp],
+      entities: [User, User_address, Roles, Permission, UsersVerifiedOtp],
       synchronize: true,
       // logging:true
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      fallbacks: {
+        nl: 'nl',
+      },
+      loaderOptions: {
+        // path: path.join(__dirname, '/i18n/'),
+        path: [__dirname + '/i18n/'],
+        watch: true,
+      },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+      ],
     }),
     AuthModule,
     UsersModule,
