@@ -43,14 +43,19 @@ export class RolesService {
     if (!user) {
       throw new UnauthorizedException('user not exist');
     }
-    const role = await this.roleRepository.findOne({
-      where: { id: data.role_id },
-    });
-    if (!role) {
-      throw new UnauthorizedException('role not exist');
-    }
+    console.log(user);
+    console.log(data);
 
-    user.role.push(role);
+    for (let i = 0; i < data.role_id.length; i++) {
+      const role = await this.roleRepository.findOne({
+        where: { id: data.role_id[i] },
+      });
+      if (!role) {
+        throw new UnauthorizedException('role not exist');
+      }
+
+      user.role.push(role);
+    }
     return this.usersRepository.save(user);
   }
 }

@@ -6,6 +6,11 @@ import { UpdatePermissionDto } from '../dto/updatePermissionDto';
 import { Permission } from '../entity/permission.entity';
 import { User } from 'src/users/entities/user.entity';
 import { I18nContext, I18nService } from 'nestjs-i18n';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { log } from 'console';
 
 @Injectable()
@@ -22,30 +27,37 @@ export class PermissionService {
     return this.permissionRepository.save(createPermissionDto);
   }
 
-  async listAllPermission(data: any) {
-    const [entities, count]: [Partial<Permission[]>, number] =
-      await this.permissionRepository.findAndCount({
-        take: data.take,
-        skip: data.skip,
-      });
-      
-    // const permissions: Partial<Permission[]> =
-    //   await this.permissionRepository.find({
-    //     take: data.take,
-    //     skip: data.skip,
-    //   });
+  // async listAllPermission(data: any) {
+  //   const [entities, count]: [Partial<Permission[]>, number] =
+  //     await this.permissionRepository.findAndCount({
+  //       take: data.take,
+  //       skip: data.skip,
+  //     });
 
-    console.log(count);
+  //   // const permissions: Partial<Permission[]> =
+  //   //   await this.permissionRepository.find({
+  //   //     take: data.take,
+  //   //     skip: data.skip,
+  //   //   });
 
-    return {
-      current_item_count: entities.length,
-      items_per_page: data.take,
-      total_items: count,
-      total_pages: Math.ceil(count / data.take),
-      items: [entities],
-    };
+  //   console.log(count);
+
+  //   return {
+  //     current_item_count: entities.length,
+  //     items_per_page: data.take,
+  //     total_items: count,
+  //     total_pages: Math.ceil(count / data.take),
+  //     items: [entities],
+  //   };
+  // }
+  // ?...................
+  async paginate(options: IPaginationOptions): Promise<Pagination<Permission>> {
+    const qb = this.permissionRepository.createQueryBuilder('q');
+    qb.orderBy('q.id', 'DESC');
+    qb.where({name:"create"})
+    return paginate<Permission>(qb, options);
   }
-
+  // ................................
   findOnePermission(id: number) {
     return this.permissionRepository.find({ where: { id: id } });
   }
