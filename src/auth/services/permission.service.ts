@@ -15,15 +15,35 @@ export class PermissionService {
     private permissionRepository: Repository<Permission>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private readonly i18n: I18nService
+    private readonly i18n: I18nService,
   ) {}
 
   createPermission(createPermissionDto: CreatePermissionDto) {
     return this.permissionRepository.save(createPermissionDto);
   }
 
-  listAllPermission() {
-    return this.permissionRepository.find();
+  async listAllPermission(data: any) {
+    const [entities, count]: [Partial<Permission[]>, number] =
+      await this.permissionRepository.findAndCount({
+        take: data.take,
+        skip: data.skip,
+      });
+      
+    // const permissions: Partial<Permission[]> =
+    //   await this.permissionRepository.find({
+    //     take: data.take,
+    //     skip: data.skip,
+    //   });
+
+    console.log(count);
+
+    return {
+      current_item_count: entities.length,
+      items_per_page: data.take,
+      total_items: count,
+      total_pages: Math.ceil(count / data.take),
+      items: [entities],
+    };
   }
 
   findOnePermission(id: number) {
@@ -60,12 +80,11 @@ export class PermissionService {
       })
     ) {
       // throw new UnauthorizedException('permission already assigned');
-      
+
       // return this.i18n.t('test.INVALID',{ lang:   this.i18n.resolveLanguage("nl")});
-      return this.i18n.t('test.INVALID',{ lang:   I18nContext.current().lang });
+      return this.i18n.t('test.INVALID', { lang: I18nContext.current().lang });
     }
     user.permission.push(permission);
     return this.usersRepository.save(user);
   }
 }
- 

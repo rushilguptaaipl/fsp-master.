@@ -3,6 +3,7 @@ import { AuthGuard } from '../auth.guard';
 import { PermissionService } from '../services/permission.service';
 import { CreatePermissionDto } from '../dto/createPermissionDto';
 import { UpdatePermissionDto } from '../dto/updatePermissionDto';
+import { pagenation } from '../custom-decorators/pagenation.decorator';
 
 @Controller('permission')
 // @UseGuards(AuthGuard)
@@ -14,13 +15,13 @@ export class PermissionController {
   }
 
   @Get('searchall')
-  listAllPermission() {
-    return this.permissionService.listAllPermission();
+  listAllPermission(@pagenation() data: any) {
+    return this.permissionService.listAllPermission(data);
   }
 
   @Get('searchone/:id')
   findOnePermission(@Param('id') id: number) {
-     return this.permissionService.findOnePermission(id);
+    return this.permissionService.findOnePermission(id);
   }
 
   @Post('update/:id')
@@ -36,8 +37,8 @@ export class PermissionController {
     return this.permissionService.deletePermission(id);
   }
 
-  @Post("assign-permission")
-  assignPermission(@Body() data:any){
+  @Post('assign-permission')
+  assignPermission(@Body() data: any) {
     return this.permissionService.assignPermission(data);
   }
 }
