@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Roles } from '../entity/roles.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateRoleDto } from '../dto/createRoleDto';
 import { UpdateRoleDto } from '../dto/updateRoleDto';
 import { User } from 'src/users/entities/user.entity';
+import { log } from 'console';
 
 @Injectable()
 export class RolesService {
@@ -43,19 +44,60 @@ export class RolesService {
     if (!user) {
       throw new UnauthorizedException('user not exist');
     }
-    console.log(user);
-    console.log(data);
+
+    const roles_arr = await this.roleRepository.findBy({
+      id: In([data.role_id]),
+    });
+
+    if (roles_arr.length != data.role_id.length) {
+      throw new UnauthorizedException('no role !!!');
+    }
 
     for (let i = 0; i < data.role_id.length; i++) {
-      const role = await this.roleRepository.findOne({
-        where: { id: data.role_id[i] },
+      const role = await this.usersRepository.find({
+        where: { id: user.id, role: { id: data.role_id[i] } },
+        relations: { role: true },
       });
-      if (!role) {
-        throw new UnauthorizedException('role not exist');
-      }
 
-      user.role.push(role);
+      if (role.length == 0) {
+        user.role.push(roles_arr[i]);
+      } else {
+        throw new UnauthorizedException('role already assigned');
+      }
     }
     return this.usersRepository.save(user);
+  }
+
+  async deleteAssignedRole(data: any) {
+    const user = await this.usersRepository.findOne({
+      where: { id: data.user_id },
+      relations: { role: true },
+    });
+    console.log(user);
+    
+    if (!user) {
+      throw new UnauthorizedException('user not exist');
+    }
+
+    const indexToDelete = user.role.findIndex(obj => console.log( obj.id === data.role_id)
+   );
+    console.log(indexToDelete);
+    
+    
+    
+    if (indexToDelete !== -1) {
+      user.role.splice(indexToDelete, 1);
+    }
+    return this.usersRepository.update(user.id , {user.role :user})
+
+    // for (let i = 0; i < data.role_id.length; i++) {
+    //   const role = await this.usersRepository.find({
+    //     where: { id: user.id, role: { id: data.role_id[i] } },
+    //     relations: { role: true },
+    //   });
+    //   if (role.length != 0) {
+    //     this.usersRepository.update({user: });
+    //   } 
+    // }
   }
 }

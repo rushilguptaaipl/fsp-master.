@@ -54,7 +54,7 @@ export class PermissionService {
   async paginate(options: IPaginationOptions): Promise<Pagination<Permission>> {
     const qb = this.permissionRepository.createQueryBuilder('q');
     qb.orderBy('q.id', 'DESC');
-    qb.where({name:"create"})
+    qb.where({ name: 'create' });
     return paginate<Permission>(qb, options);
   }
   // ................................

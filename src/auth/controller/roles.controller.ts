@@ -37,4 +37,9 @@ export class RolesController {
   assignRole(@Body() data:any){
     return this.roleService.assignRole(data);
   }
+
+  @Post("delete-role")
+  deleteAssignedRole(@Body() data:any){
+    return this.roleService.deleteAssignedRole(data)
+  }
 }
