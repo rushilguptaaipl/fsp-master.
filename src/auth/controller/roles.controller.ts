@@ -7,6 +7,8 @@ import { AssignRoleDto } from '../dto/assignRoleDto';
 import { DeleteAssignedRoleDto } from '../dto/deleteAssignedRoleDto';
 import { AssignPermissionToRoleDto } from '../dto/assignPermissionToRoleDto';
 import { RemovePermissionFromRoleDto } from '../dto/removePermissionFromRoleDto';
+import { Roles } from '../custom-decorators/roles.decorator';
+import { RolesGuard } from '../roles.guard';
 
 @Controller('roles')
 // @UseGuards(AuthGuard)
@@ -36,7 +38,8 @@ export class RolesController {
   deleteRole(@Param('id') id:number){
     return this.roleService.deleteRole(id)
   }
-
+  @Roles("super_admin")
+  @UseGuards(RolesGuard)
   @Post("assign-role")
   assignRole(@Body() assignRoleDto:AssignRoleDto){
     return this.roleService.assignRole(assignRoleDto);

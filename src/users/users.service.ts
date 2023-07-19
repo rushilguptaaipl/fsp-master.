@@ -45,4 +45,8 @@ export class UsersService {
       throw new UnauthorizedException("user not found")
     }
   }
+
+  findById(userId :number) {
+    return this.usersRepository.findOne({where:{id: userId},relations : {role :true}})
+  }
 }
