@@ -26,7 +26,7 @@ export class Roles {
   @CreateDateColumn({ type: 'timestamp' })
   public updatedAt: Date;
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Permission , {cascade : true})
   @JoinTable({name:"role_has_permission"})
   permissions: Permission[]
 

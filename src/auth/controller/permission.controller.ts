@@ -6,6 +6,8 @@ import { UpdatePermissionDto } from '../dto/updatePermissionDto';
 import { pagenation } from '../custom-decorators/pagenation.decorator';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { Permission } from '../entity/permission.entity';
+import { AssignPermissionDto } from '../dto/assignPermissionDto';
+import { DeleteAssignedPermissionDto } from '../dto/deleteAssignedPermissionDto';
 
 @Controller('permission')
 // @UseGuards(AuthGuard)
@@ -53,7 +55,13 @@ export class PermissionController {
   }
 
   @Post('assign-permission')
-  assignPermission(@Body() data: any) {
-    return this.permissionService.assignPermission(data);
+  assignPermission(@Body() assignPermissionDto: AssignPermissionDto) {
+    return this.permissionService.assignPermission(assignPermissionDto);
+  }
+
+
+  @Post("delete-permission")
+  deleteAssignedPermission(@Body() deleteAssignedPermission:DeleteAssignedPermissionDto){
+    return this.permissionService.deleteAssignedPermission(deleteAssignedPermission)
   }
 }

@@ -3,6 +3,10 @@ import { CreateRoleDto } from '../dto/createRoleDto';
 import { RolesService } from '../services/roles.service';
 import { UpdateRoleDto } from '../dto/updateRoleDto';
 import { AuthGuard } from '../auth.guard';
+import { AssignRoleDto } from '../dto/assignRoleDto';
+import { DeleteAssignedRoleDto } from '../dto/deleteAssignedRoleDto';
+import { AssignPermissionToRoleDto } from '../dto/assignPermissionToRoleDto';
+import { RemovePermissionFromRoleDto } from '../dto/removePermissionFromRoleDto';
 
 @Controller('roles')
 // @UseGuards(AuthGuard)
@@ -34,12 +38,21 @@ export class RolesController {
   }
 
   @Post("assign-role")
-  assignRole(@Body() data:any){
-    return this.roleService.assignRole(data);
+  assignRole(@Body() assignRoleDto:AssignRoleDto){
+    return this.roleService.assignRole(assignRoleDto);
   }
 
   @Post("delete-role")
-  deleteAssignedRole(@Body() data:any){
-    return this.roleService.deleteAssignedRole(data)
+  deleteAssignedRole(@Body() deleteAssignedRole:DeleteAssignedRoleDto){
+    return this.roleService.deleteAssignedRole(deleteAssignedRole)
+  }
+
+  @Post("assign-permission")
+  assignPermission(@Body() assignPermissionToRoleDto:AssignPermissionToRoleDto){
+    return this.roleService.assignPermission(assignPermissionToRoleDto);
+  }
+  @Post("delete-assign-permission")
+  deleteAssignedPermission(@Body() removePermissionFromRoleDto:RemovePermissionFromRoleDto){
+    return this.roleService.deleteAssignedPermission(removePermissionFromRoleDto);
   }
 }

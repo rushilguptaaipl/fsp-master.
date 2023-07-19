@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePermissionDto } from '../dto/createPermissionDto';
 import { UpdatePermissionDto } from '../dto/updatePermissionDto';
@@ -12,6 +12,9 @@ import {
   Pagination,
 } from 'nestjs-typeorm-paginate';
 import { log } from 'console';
+import { numericAlphaChars } from '@ngneat/falso/lib/sequence';
+import { DeleteAssignedPermissionDto } from '../dto/deleteAssignedPermissionDto';
+import { AssignPermissionDto } from '../dto/assignPermissionDto';
 
 @Injectable()
 export class PermissionService {
@@ -70,33 +73,84 @@ export class PermissionService {
     return this.permissionRepository.delete(id);
   }
 
-  async assignPermission(data) {
+  async assignPermission(assignPermissionDto:AssignPermissionDto) {
     const user = await this.usersRepository.findOne({
-      where: { id: data.user_id },
+      where: { id: assignPermissionDto.user_id },
       relations: { permission: true },
     });
+
+    console.log(user);
+
     if (!user) {
-      throw new UnauthorizedException('user not exist');
+      return this.i18n.t('test.USER_NOT_EXIST', {
+        lang: I18nContext.current().lang,
+      });
     }
-    const permission = await this.permissionRepository.findOne({
-      where: { id: data.permission_id },
+
+    const permission_arr = await this.permissionRepository.findBy({
+      id: In([assignPermissionDto.permission_id]),
     });
-    if (!permission) {
-      throw new UnauthorizedException('role not exist');
+
+    if (permission_arr.length != assignPermissionDto.permission_id.length) {
+      throw this.i18n.t('test.PERMISSION_NOT_EXIST', {
+        lang: I18nContext.current().lang,
+      });
     }
 
     if (
-      this.usersRepository.find({
-        where: { id: data.user_id, permission: { id: data.permission_id } },
-        relations: { permission: true },
-      })
+      user.permission.length != 0 &&
+      user.permission
+        .map((id) => assignPermissionDto.permission_id.includes(+id.id))
+        .includes(true)
     ) {
-      // throw new UnauthorizedException('permission already assigned');
-
-      // return this.i18n.t('test.INVALID',{ lang:   this.i18n.resolveLanguage("nl")});
-      return this.i18n.t('test.INVALID', { lang: I18nContext.current().lang });
+      return this.i18n.t('test.PERMISSION_ALREADY_ASSIGNED', {
+        lang: I18nContext.current().lang,
+      });
     }
-    user.permission.push(permission);
+
+    if (user.permission.length == 0) {
+      user.permission = permission_arr;
+    } else {
+      const newArr = [...permission_arr, ...user.permission];
+      user.permission = newArr;
+    }
+
+    return this.usersRepository.save(user);
+  }
+
+  async deleteAssignedPermission(deleteAssignedPermission: DeleteAssignedPermissionDto) {
+    const user = await this.usersRepository.findOne({
+      where: { id: deleteAssignedPermission.user_id },
+      relations: { permission: true },
+    });
+
+    if (!user) {
+      return this.i18n.t('test.USER_NOT_EXIST', {
+        lang: I18nContext.current().lang,
+      });
+    }
+
+    const test = user.permission.map((id) => {
+      if (id.id == deleteAssignedPermission.permission_id) {
+        return true;
+      }
+    });
+
+    if (test.includes(true)) {
+      const permission_arr = user.permission;
+    
+
+      const index = permission_arr.findIndex((item) => +item.id === deleteAssignedPermission.permission_id);
+      if (index > -1) {
+        permission_arr.splice(index, 1);
+      }
+      user.permission = permission_arr;
+    } else {
+      return this.i18n.t('test.PERMISSION_NOT_EXIST', {
+        lang: I18nContext.current().lang,
+      });
+    }
+
     return this.usersRepository.save(user);
   }
 }
