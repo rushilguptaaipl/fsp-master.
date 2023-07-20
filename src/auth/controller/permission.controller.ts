@@ -1,4 +1,14 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '../auth.guard';
 import { PermissionService } from '../services/permission.service';
 import { CreatePermissionDto } from '../dto/createPermissionDto';
@@ -10,7 +20,7 @@ import { AssignPermissionDto } from '../dto/assignPermissionDto';
 import { DeleteAssignedPermissionDto } from '../dto/deleteAssignedPermissionDto';
 
 @Controller('permission')
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
   @Post('create')
@@ -25,13 +35,13 @@ export class PermissionController {
   // .........................
   @Get('searchall')
   async getAllQuiz(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number ,
-    @Query('limit', new DefaultValuePipe(2), ParseIntPipe) limit: number ,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(2), ParseIntPipe) limit: number,
   ): Promise<Pagination<Permission>> {
     const options: IPaginationOptions = {
       limit,
       page,
-    }
+    };
     return await this.permissionService.paginate(options);
   }
   // ....................
@@ -59,9 +69,12 @@ export class PermissionController {
     return this.permissionService.assignPermission(assignPermissionDto);
   }
 
-
-  @Post("delete-permission")
-  deleteAssignedPermission(@Body() deleteAssignedPermission:DeleteAssignedPermissionDto){
-    return this.permissionService.deleteAssignedPermission(deleteAssignedPermission)
+  @Post('delete-permission')
+  deleteAssignedPermission(
+    @Body() deleteAssignedPermission: DeleteAssignedPermissionDto,
+  ) {
+    return this.permissionService.deleteAssignedPermission(
+      deleteAssignedPermission,
+    );
   }
 }

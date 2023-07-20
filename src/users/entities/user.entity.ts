@@ -29,7 +29,7 @@ export class User {
   @Column({type:"bigint"})
   phoneNo : number
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({type :"timestamp"})
   deletedAt?: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
