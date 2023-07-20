@@ -33,7 +33,7 @@ export class UsersController {
     return this.usersService.updateProfile(id, UpdateUserDto);
   }
 
-  @Post('changepassword')
+  @Post('change-password')
   changePassword(@Body() changePasswordDto:ChangePasswordDto , @currentUser() id: number){
     return this.usersService.changePassword(id,changePasswordDto)
   }

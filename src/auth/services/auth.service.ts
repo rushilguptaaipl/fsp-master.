@@ -51,7 +51,7 @@ export class AuthService {
     if (user) {
       throw new ConflictException('user already exist');
     }
-
+    
     return await this.usersService.createUser(signUpDto);
   }
 

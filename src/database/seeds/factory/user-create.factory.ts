@@ -1,17 +1,12 @@
-// import { define, factory } from "typeorm-seeding";
-// import * as Chance from 'chance';
-// import { User } from "src/users/entities/user.entity";
+import {  randFirstName, randLastName, randPassword } from '@ngneat/falso';
+import { define } from 'typeorm-seeding';
+import { User } from "../../../users/entities/user.entity";
 
+define(User, () => {
+  const user = new User();
+  user.firstName = randFirstName();
+  user.lastName = randLastName();
+  user.password = randPassword();
+  return user;
+});
 
-
-// const chance = new Chance();
-
-// define(User, (faker: typeof Chance) => {
-//   const user = new User();
-//   user.firstName = chance.name();
-//   user.lastName = chance.email();
-//   // Set other properties using Chance or custom logic
-//   return user;
-// });
-
-// export const UserFactory = factory(User)().set(chance);
