@@ -11,51 +11,75 @@ import { Roles } from '../custom-decorators/roles.decorator';
 import { RolesGuard } from '../roles.guard';
 
 @Controller('roles')
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 export class RolesController {
   constructor(private readonly roleService: RolesService) {}
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
   @Post('create')
   createRole(@Body() createRoleDto: CreateRoleDto) {
     return this.roleService.createRole(createRoleDto);
   }
 
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
   @Get('searchall')
   listAllRoles() {
     return this.roleService.listAllRoles();
   }
 
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
   @Get('searchone/:id')
   findOneRole(@Param('id') id: number) {
     return this.roleService.findOneRole(id);
   }
 
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
   @Post('update/:id')
   updateRole(@Param('id') id: number, @Body() updateRoleDto: UpdateRoleDto) {
     return this.roleService.updateRole(id, updateRoleDto);
   }
 
-  @Get('delete/:id')
-  deleteRole(@Param('id') id:number){
-    return this.roleService.deleteRole(id)
-  }
-  @Roles("super_admin")
+  @Roles('super_admin', 'admin')
   @UseGuards(RolesGuard)
-  @Post("assign-role")
-  assignRole(@Body() assignRoleDto:AssignRoleDto){
+  @Get('delete/:id')
+  deleteRole(@Param('id') id: number) {
+    return this.roleService.deleteRole(id);
+  }
+
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
+  @Post('assign-role')
+  assignRole(@Body() assignRoleDto: AssignRoleDto) {
     return this.roleService.assignRole(assignRoleDto);
   }
 
-  @Post("delete-role")
-  deleteAssignedRole(@Body() deleteAssignedRole:DeleteAssignedRoleDto){
-    return this.roleService.deleteAssignedRole(deleteAssignedRole)
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
+  @Post('delete-role')
+  deleteAssignedRole(@Body() deleteAssignedRole: DeleteAssignedRoleDto) {
+    return this.roleService.deleteAssignedRole(deleteAssignedRole);
   }
 
-  @Post("assign-permission")
-  assignPermission(@Body() assignPermissionToRoleDto:AssignPermissionToRoleDto){
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
+  @Post('assign-permission')
+  assignPermission(
+    @Body() assignPermissionToRoleDto: AssignPermissionToRoleDto,
+  ) {
     return this.roleService.assignPermission(assignPermissionToRoleDto);
   }
-  @Post("delete-assign-permission")
-  deleteAssignedPermission(@Body() removePermissionFromRoleDto:RemovePermissionFromRoleDto){
-    return this.roleService.deleteAssignedPermission(removePermissionFromRoleDto);
+
+  @Roles('super_admin', 'admin')
+  @UseGuards(RolesGuard)
+  @Post('delete-assign-permission')
+  deleteAssignedPermission(
+    @Body() removePermissionFromRoleDto: RemovePermissionFromRoleDto,
+  ) {
+    return this.roleService.deleteAssignedPermission(
+      removePermissionFromRoleDto,
+    );
   }
 }

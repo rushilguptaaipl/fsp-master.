@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UseInterceptors } from '@nestjs/common';
 import { Roles } from '../entity/roles.entity';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import { DeleteAssignedRoleDto } from '../dto/deleteAssignedRoleDto';
 import { Permission } from '../entity/permission.entity';
 import { AssignPermissionToRoleDto } from '../dto/assignPermissionToRoleDto';
 import { RemovePermissionFromRoleDto } from '../dto/removePermissionFromRoleDto';
+import { TransformInterceptor } from '../transform.intercept';
 
 @Injectable()
 export class RolesService {
@@ -25,8 +26,9 @@ export class RolesService {
   ) {}
 
   // create role
-
+  
   createRole(createRoleDto: CreateRoleDto) {
+    createRoleDto.name = createRoleDto.name.toUpperCase();
     return this.roleRepository.save(createRoleDto);
   }
 
@@ -173,7 +175,9 @@ export class RolesService {
         lang: I18nContext.current().lang,
       });
     }
-    const objectValues = permission_arr.filter((obj) => assignPermissionToRoleDto.permission_id.includes(+obj.id)).length;
+    const objectValues = permission_arr.filter((obj) =>
+      assignPermissionToRoleDto.permission_id.includes(+obj.id),
+    ).length;
 
     console.log(objectValues);
 
@@ -199,7 +203,9 @@ export class RolesService {
   }
 
   // remove Permission from role
-  async deleteAssignedPermission(removePermissionFromRoleDto: RemovePermissionFromRoleDto) {
+  async deleteAssignedPermission(
+    removePermissionFromRoleDto: RemovePermissionFromRoleDto,
+  ) {
     const role = await this.roleRepository.findOne({
       where: { id: removePermissionFromRoleDto.role_id },
       relations: { permissions: true },
