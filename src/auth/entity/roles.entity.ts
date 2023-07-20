@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -25,6 +26,9 @@ export class Roles {
 
   @CreateDateColumn({ type: 'timestamp' })
   public updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   @ManyToMany(() => Permission , {cascade : true})
   @JoinTable({name:"role_has_permission"})
