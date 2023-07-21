@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
@@ -25,6 +26,10 @@ export class Permission {
 
   @CreateDateColumn({ type: 'timestamp' })
   public updatedAt: Date;
+
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   @ManyToMany(() => User , (user)=>user.permission)
   user: User[];
